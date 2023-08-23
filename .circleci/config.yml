@@ -9,3 +9,27 @@ jobs:
       - checkout
       - run: git lfs ls-files -l
       - run: git lfs ls-files -d
+  push:
+    macos:
+      xcode: 14.3.1
+    resource_class: macos.m1.medium.gen1
+    steps:
+      - checkout
+      - run: |
+          cat .gitattributes
+      - run: |
+          curl https://examples.onelinerhub.com/file.tar.gz -o oneliner.tar
+      - run: |
+          ls -lah *.tar
+      - run: |
+          git add oneliner.tar
+      - run: |
+          git commit -m '[skip ci] add oneliner.tar'
+          git checkout -b pushed
+          git push origin pushed
+
+workflows:
+  main:
+    jobs:
+      - build
+      - push
