@@ -18,14 +18,15 @@ jobs:
       - checkout
       - run: |
           cat .gitattributes
-      - run: |
-          curl https://examples.onelinerhub.com/file.tar.gz -o oneliner.tar
+      - run:
+          name: create 5GB tar file
+          command: head -c 5368709120 /dev/urandom > sample5gb.tar
       - run: |
           ls -lah *.tar
       - run: |
-          git add oneliner.tar
+          git add sample5gb.tar
       - run: |
-          git commit -m '[skip ci] add oneliner.tar'
+          git commit -m '[skip ci] add sample5gb.tar'
           git checkout -b pushed
           git push origin pushed
 
