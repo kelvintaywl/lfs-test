@@ -27,8 +27,8 @@ jobs:
           git add sample5gb.tar
       - run: |
           git commit -m '[skip ci] add sample5gb.tar'
-          git checkout -b pushed
-          git push origin pushed
+          git checkout -b $CIRCLE_WORKFLOW_ID
+          git push origin $CIRCLE_WORKFLOW_ID
 
 workflows:
   main:
