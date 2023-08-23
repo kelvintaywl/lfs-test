@@ -10,10 +10,13 @@ jobs:
       - run: git lfs ls-files -l
       - run: git lfs ls-files -d
   push:
+    parameters:
+      macos:
+        type: string
     macos:
       xcode: 14.3.1
     # available for Free plan
-    resource_class: macos.x86.medium.gen2
+    resource_class: << parameters.macos >>
     steps:
       - checkout
       - run: |
@@ -27,11 +30,15 @@ jobs:
           git add sample1halfgb.tar
       - run: |
           git commit -m '[skip ci] add sample1halfgb.tar'
-          git checkout -b $CIRCLE_WORKFLOW_ID
-          git push origin $CIRCLE_WORKFLOW_ID
+          git checkout -b $CIRCLE_WORKFLOW_JOB_ID
+          git push origin $CIRCLE_WORKFLOW_JOB_ID
 
 workflows:
   main:
     jobs:
-      - build
-      - push
+      - push:
+          matrix:
+            parameters:
+              macos:
+                - macos.x86.medium.gen2
+                - macos.m1.medium.gen1
