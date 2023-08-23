@@ -1,0 +1,11 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.10
+    resource_class: large
+    steps:
+      - checkout
+      - run: git lfs ls-files -l
+      - run: git lfs ls-files -d
