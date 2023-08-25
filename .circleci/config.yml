@@ -22,17 +22,17 @@ jobs:
       - run: |
           cat .gitattributes
       - run:
-          name: create 200MB tar file
-          command: head -c 209715200 /dev/urandom > sample200mb.tar
+          name: create 50MB tar file
+          command: head -c 52428800 /dev/urandom > sample50mb.tar
       - run: |
           ls -lah *.tar
       - run: |
-          git add sample200mb.tar
+          git add sample50mb.tar
       - run: |
           git config --global user.name "Kelvin Tay"
           git config --global user.email kelvintaywl@gmail.com
       - run: |
-          git commit -m '[skip ci] add sample200mb.tar'
+          git commit -m '[skip ci] add sample50mb.tar'
           git checkout -b $CIRCLE_WORKFLOW_JOB_ID
           git push origin $CIRCLE_WORKFLOW_JOB_ID
 
