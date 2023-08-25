@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   aws-cli: circleci/aws-cli@4.0.0
+  macos: circleci/macos@2.3.6
 
 jobs:
   build:
@@ -44,7 +45,7 @@ jobs:
           condition:
             equal: [ "macos.m1.medium.gen1", << parameters.macos >> ]
           steps:
-            - run: sudo softwareupdate --install-rosetta
+            - macos/install-rosetta
       - aws-cli/setup
       - run:
          name: mock upload to GitHub LFS via S3 bucket in us-east-1
