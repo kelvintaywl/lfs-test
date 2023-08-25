@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-cli: circleci/aws-cli@4.0.0
+
 jobs:
   build:
     docker:
@@ -26,15 +29,20 @@ jobs:
           command: head -c 52428800 /dev/urandom > sample50mb.tar
       - run: |
           ls -lah *.tar
-      - run: |
-          git add sample50mb.tar
-      - run: |
-          git config --global user.name "Kelvin Tay"
-          git config --global user.email kelvintaywl@gmail.com
-      - run: |
-          git commit -m '[skip ci] add sample50mb.tar'
-          git checkout -b $CIRCLE_WORKFLOW_JOB_ID
-          git push origin $CIRCLE_WORKFLOW_JOB_ID
+      # - run: |
+      #     git add sample50mb.tar
+      # - run: |
+      #     git config --global user.name "Kelvin Tay"
+      #     git config --global user.email kelvintaywl@gmail.com
+      # - run: |
+      #     git commit -m '[skip ci] add sample50mb.tar'
+      #     git checkout -b $CIRCLE_WORKFLOW_JOB_ID
+      #     git push origin $CIRCLE_WORKFLOW_JOB_ID
+      - aws-cli/setup
+      - run:
+         name: mock upload to GitHub LFS via S3 bucket in us-east-1
+         command: |
+           aws s3 cp sample50mb.tar "s3://kelvintaywl-mock-lfs/${CIRCLE_WORKFLOW_JOB_ID}/sample50mb.tar"
 
 workflows:
   main:
