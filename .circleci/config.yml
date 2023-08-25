@@ -19,6 +19,7 @@ jobs:
         type: string
     macos:
       xcode: 14.3.1
+    parallelism: 2
     # available for Free plan
     resource_class: << parameters.macos >>
     environment:
@@ -27,6 +28,7 @@ jobs:
       - checkout
       - run: |
           cat .gitattributes
+      - run: curl https://makotom.net/env
       - run:
           name: create 500MB tar file
           command: head -c 524288000 /dev/urandom > sample500mb.tar
@@ -50,7 +52,7 @@ jobs:
       - run:
          name: mock upload to GitHub LFS via S3 bucket in us-east-1
          command: |
-           aws s3 cp sample500mb.tar "s3://kelvintaywl-mock-lfs/${CIRCLE_WORKFLOW_JOB_ID}/sample500mb.tar"
+           aws s3 cp sample500mb.tar "s3://kelvintaywl-mock-lfs/${CIRCLE_WORKFLOW_JOB_ID}/sample500mb.tar" --debug
 
 workflows:
   main:
