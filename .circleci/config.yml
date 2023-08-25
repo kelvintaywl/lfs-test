@@ -27,12 +27,12 @@ jobs:
       - run: |
           cat .gitattributes
       - run:
-          name: create 50MB tar file
-          command: head -c 52428800 /dev/urandom > sample50mb.tar
+          name: create 500MB tar file
+          command: head -c 524288000 /dev/urandom > sample500mb.tar
       - run: |
           ls -lah *.tar
       # - run: |
-      #     git add sample50mb.tar
+      #     git add sample500mb.tar
       # - run: |
       #     git config --global user.name "Kelvin Tay"
       #     git config --global user.email kelvintaywl@gmail.com
@@ -40,11 +40,16 @@ jobs:
       #     git commit -m '[skip ci] add sample50mb.tar'
       #     git checkout -b $CIRCLE_WORKFLOW_JOB_ID
       #     git push origin $CIRCLE_WORKFLOW_JOB_ID
+      - when:
+          condition:
+            equal: [ "macos.m1.medium.gen1", << parameters.macos >> ]
+          steps:
+            - run: sudo softwareupdate --install-rosetta
       - aws-cli/setup
       - run:
          name: mock upload to GitHub LFS via S3 bucket in us-east-1
          command: |
-           aws s3 cp sample50mb.tar "s3://kelvintaywl-mock-lfs/${CIRCLE_WORKFLOW_JOB_ID}/sample50mb.tar"
+           aws s3 cp sample500mb.tar "s3://kelvintaywl-mock-lfs/${CIRCLE_WORKFLOW_JOB_ID}/sample500mb.tar"
 
 workflows:
   main:
